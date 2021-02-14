@@ -1,4 +1,5 @@
 import {
+  Box,
   Icon,
   IconButton,
   List,
@@ -7,7 +8,7 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import { Place, PlaceCallback, PlaceList } from "../store/types";
+import { PlaceCallback, PlaceList } from "../store/types";
 
 interface BookmarksListOptions {
   bookmarks: PlaceList;
@@ -19,7 +20,8 @@ const BookmarksList = (props: BookmarksListOptions) => {
   const { bookmarks } = props;
 
   return (
-    <div
+    <Box
+      width={"auto"}
       style={{
         maxHeight: 220,
         overflow: "auto",
@@ -30,29 +32,36 @@ const BookmarksList = (props: BookmarksListOptions) => {
           Favorite a place to it add to bookmark's list
         </Typography>
       ) : (
-        <List>
-          {bookmarks.map((place: Place, index: number) => (
-            <ListItem button key={index} onClick={() => props.onSelect(place)}>
-              <ListItemText
-                style={{
-                  overflow: "auto",
-                  textOverflow: "ellipsis",
-                }}
-                primary={place.description}
-              />
-              <ListItemSecondaryAction>
-                <IconButton
-                  onClick={() => props.onDelete(place)}
-                  color="secondary"
-                >
-                  <Icon>delete</Icon>
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
+        <Box flexGrow={1}>
+          <List
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {bookmarks.map((place, index) => (
+              <ListItem
+                style={{ width: "100%" }}
+                key={index}
+                divider
+                button
+                onClick={() => props.onSelect(place)}
+              >
+                <ListItemText primary={place.description} />
+                <ListItemSecondaryAction>
+                  <IconButton
+                    onClick={() => props.onDelete(place)}
+                    color="secondary"
+                  >
+                    <Icon>delete</Icon>
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

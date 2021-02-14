@@ -54,7 +54,7 @@ const SearchInput = (props: SearchInputOptions) => {
 
   return (
     <Autocomplete
-      style={{ padding: 20, minWidth: 250 }}
+      style={{ padding: 20, width: "30vw", minWidth: 250 }}
       filterOptions={(x) => x}
       options={options}
       autoComplete

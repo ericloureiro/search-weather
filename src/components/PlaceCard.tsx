@@ -37,7 +37,7 @@ const PlaceCard = (props: PlaceCardOptions) => {
   return (
     <div
       style={{
-        maxWidth: 550,
+        maxWidth: "85vw",
         overflow: "hidden",
         textAlign: "left",
       }}
@@ -47,7 +47,6 @@ const PlaceCard = (props: PlaceCardOptions) => {
           {place.structured_formatting.main_text}
         </Typography>
         <Typography noWrap variant="h5">
-          {place.structured_formatting.secondary_text}
           {place.structured_formatting.secondary_text}
         </Typography>
         <Typography variant="body1">{description}</Typography>
