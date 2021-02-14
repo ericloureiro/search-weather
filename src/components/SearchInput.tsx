@@ -1,4 +1,11 @@
-import { Grid, TextField, Typography } from "@material-ui/core";
+import {
+  createStyles,
+  Grid,
+  makeStyles,
+  TextField,
+  Theme,
+  Typography,
+} from "@material-ui/core";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { Autocomplete } from "@material-ui/lab";
 import parse from "autosuggest-highlight/parse";
@@ -10,7 +17,22 @@ interface SearchInputOptions {
   onSelect: PlaceCallback;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      padding: 20,
+      width: "30vw",
+      minWidth: 250,
+    },
+    icon: {
+      margin: 5,
+      padding: 5,
+    },
+  })
+);
+
 const SearchInput = (props: SearchInputOptions) => {
+  const classes = useStyles();
   const autocomplete = { current: null };
   const [value, setValue] = useState<Place | null>(null);
   const [inputValue, setInputValue] = useState("");
@@ -54,7 +76,7 @@ const SearchInput = (props: SearchInputOptions) => {
 
   return (
     <Autocomplete
-      style={{ padding: 20, width: "30vw", minWidth: 250 }}
+      className={classes.root}
       filterOptions={(x) => x}
       options={options}
       autoComplete
@@ -99,12 +121,7 @@ const SearchInput = (props: SearchInputOptions) => {
           return (
             <Grid container alignItems="center">
               <Grid item>
-                <LocationOnIcon
-                  style={{
-                    margin: 5,
-                    padding: 5,
-                  }}
-                />
+                <LocationOnIcon className={classes.icon} />
               </Grid>
               <Grid item xs>
                 {parts.map((part: any, index: number) => (

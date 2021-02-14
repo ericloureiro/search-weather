@@ -1,11 +1,14 @@
 import {
   Box,
+  createStyles,
   Icon,
   IconButton,
   List,
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
+  makeStyles,
+  Theme,
   Typography,
 } from "@material-ui/core";
 import { PlaceCallback, PlaceList } from "../store/types";
@@ -16,32 +19,33 @@ interface BookmarksListOptions {
   onDelete: PlaceCallback;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      maxHeight: 220,
+      overflow: "auto",
+    },
+    title: {
+      margin: 20,
+    },
+  })
+);
+
 const BookmarksList = (props: BookmarksListOptions) => {
+  const classes = useStyles();
   const { bookmarks } = props;
 
   return (
-    <Box
-      width={"auto"}
-      style={{
-        maxHeight: 220,
-        overflow: "auto",
-      }}
-    >
+    <Box className={classes.root}>
       {bookmarks.length === 0 ? (
-        <Typography style={{ margin: 20 }}>
+        <Typography className={classes.title}>
           Favorite a place to it add to bookmark's list
         </Typography>
       ) : (
-        <Box flexGrow={1}>
-          <List
-            style={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
+        <Box>
+          <List>
             {bookmarks.map((place, index) => (
               <ListItem
-                style={{ width: "100%" }}
                 key={index}
                 divider
                 button

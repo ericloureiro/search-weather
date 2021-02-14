@@ -1,4 +1,13 @@
-import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
+import {
+  Box,
+  CircularProgress,
+  createStyles,
+  Grid,
+  makeStyles,
+  Paper,
+  Theme,
+  Typography,
+} from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import PlaceCard from "../components/PlaceCard";
@@ -12,6 +21,19 @@ import {
 } from "../store/actions";
 import { GOOGLE_MAPS_KEY, OPEN_WEATHER_KEY } from "../store/keys";
 import { ApplicationState, LatLngLiteral } from "../store/types";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: "flex",
+      backgroundColor: theme.palette.background.default,
+      minHeight: "100vh",
+    },
+    paper: {
+      padding: 20,
+    },
+  })
+);
 
 const loadScript = (src: string, position: HTMLElement | null, id: string) => {
   if (!position) {
@@ -33,6 +55,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const Weather = (props: ApplicationState) => {
+  const classes = useStyles();
   const { forecast, place, bookmarks } = props;
   const { today, week } = forecast;
   const [loaded, setLoaded] = useState(false);
@@ -99,61 +122,57 @@ const Weather = (props: ApplicationState) => {
   }, [bookmarks, loaded]);
 
   return (
-    <Grid
-      container
-      direction="column"
-      alignItems="center"
-      justify="center"
-      style={{ minHeight: "100vh" }}
-    >
-      <Box style={{ padding: 20 }}>
-        {!loaded ? (
-          <Box>
-            <Typography>Waiting for Location...</Typography>
-            <CircularProgress style={{ margin: 20 }} />
-            <Typography>
-              If no permission is granted, Leiria's coordinates will be used
-            </Typography>
-          </Box>
-        ) : (
-          <div>
-            {today === undefined || week === undefined ? (
-              <CircularProgress />
-            ) : (
-              <Grid container direction="column">
-                <Grid item>
-                  <Grid container spacing={2} direction="row">
-                    <Grid item xs={12} sm={6}>
-                      <PlaceCard
-                        place={place}
-                        today={today}
-                        onBookmark={() => {
-                          dispatch(toggleBookmark());
-                        }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TabGroup
-                        bookmarks={bookmarks}
-                        onSelect={(place) => {
-                          dispatch(setPlace(place));
-                        }}
-                        onDelete={(place) => {
-                          dispatch(removeBookmark(place.place_id));
-                        }}
-                      />
+    <div className={classes.root}>
+      <Grid container direction="column" alignItems="center" justify="center">
+        <Paper className={classes.paper}>
+          {!loaded ? (
+            <Box>
+              <Typography>Waiting for Location...</Typography>
+              <CircularProgress style={{ margin: 20 }} />
+              <Typography>
+                If no permission is granted, Leiria's coordinates will be used
+              </Typography>
+            </Box>
+          ) : (
+            <div>
+              {today === undefined || week === undefined ? (
+                <CircularProgress />
+              ) : (
+                <Grid container direction="column">
+                  <Grid item>
+                    <Grid container spacing={2} direction="row">
+                      <Grid item xs={12} sm={6}>
+                        <PlaceCard
+                          place={place}
+                          today={today}
+                          onBookmark={() => {
+                            dispatch(toggleBookmark());
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TabGroup
+                          bookmarks={bookmarks}
+                          onSelect={(place) => {
+                            dispatch(setPlace(place));
+                          }}
+                          onDelete={(place) => {
+                            dispatch(removeBookmark(place.place_id));
+                          }}
+                        />
+                      </Grid>
                     </Grid>
                   </Grid>
+                  <Grid item style={{ margin: 10 }}>
+                    <WeekGrid week={week} />
+                  </Grid>
                 </Grid>
-                <Grid item style={{ padding: 20 }}>
-                  <WeekGrid week={week} />
-                </Grid>
-              </Grid>
-            )}
-          </div>
-        )}
-      </Box>
-    </Grid>
+              )}
+            </div>
+          )}
+        </Paper>
+      </Grid>
+    </div>
   );
 };
 

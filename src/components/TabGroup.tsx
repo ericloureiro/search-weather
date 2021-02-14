@@ -1,4 +1,12 @@
-import { AppBar, Box, Tab, Tabs } from "@material-ui/core";
+import {
+  AppBar,
+  Box,
+  createStyles,
+  makeStyles,
+  Tab,
+  Tabs,
+  Theme,
+} from "@material-ui/core";
 import { useEffect, useMemo, useState } from "react";
 import {
   GeocoderRequest,
@@ -17,7 +25,17 @@ interface TabGroupOptions {
   onDelete: PlaceCallback;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      maxWidth: 550,
+      textAlign: "center",
+    },
+  })
+);
+
 const TabGroup = (props: TabGroupOptions) => {
+  const classes = useStyles();
   const geocoder = { current: null };
   const { bookmarks } = props;
   const [tab, setTab] = useState(0);
@@ -82,11 +100,10 @@ const TabGroup = (props: TabGroupOptions) => {
   const handleChange = (event: any, newValue: number) => setTab(newValue);
 
   return (
-    <div style={{ maxWidth: 550, textAlign: "center" }}>
-      <AppBar position="static" color="default">
+    <div className={classes.root}>
+      <AppBar position="static">
         <Tabs
           indicatorColor="primary"
-          textColor="primary"
           variant="fullWidth"
           value={tab}
           onChange={handleChange}

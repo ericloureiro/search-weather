@@ -5,6 +5,7 @@ import {
   SetForecast,
   SetPlace,
   ToggleBookmark,
+  ToggleTheme,
 } from "./types";
 
 export const setForecast = (action: Map<string, any>): SetForecast => ({
@@ -16,6 +17,10 @@ export const setForecast = (action: Map<string, any>): SetForecast => ({
 export const setPlace = (place: Place): SetPlace => ({
   type: "setPlace",
   place,
+});
+
+export const toggleTheme = (): ToggleTheme => ({
+  type: "toggleTheme",
 });
 
 export const toggleBookmark = (): ToggleBookmark => ({

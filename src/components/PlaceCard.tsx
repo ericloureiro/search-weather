@@ -1,4 +1,14 @@
-import { Box, Button, Grid, Icon, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  createStyles,
+  Grid,
+  makeStyles,
+  Theme,
+  Typography,
+} from "@material-ui/core";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import { useMemo } from "react";
 import { Day, Place, VoidCallback } from "../store/types";
 
@@ -18,7 +28,21 @@ interface PlaceCardOptions {
   onBookmark: VoidCallback;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      maxWidth: "85vw",
+      overflow: "hidden",
+      textAlign: "left",
+    },
+    button: {
+      textAlign: "right",
+    },
+  })
+);
+
 const PlaceCard = (props: PlaceCardOptions) => {
+  const classes = useStyles();
   const { place, today } = props;
   const { humidity, icon, temp, unix, windSpeed } = today;
 
@@ -35,13 +59,7 @@ const PlaceCard = (props: PlaceCardOptions) => {
   }, [today]);
 
   return (
-    <div
-      style={{
-        maxWidth: "85vw",
-        overflow: "hidden",
-        textAlign: "left",
-      }}
-    >
+    <div className={classes.root}>
       <Box>
         <Typography noWrap variant="body1" color="textSecondary">
           {place.structured_formatting.main_text}
@@ -75,16 +93,12 @@ const PlaceCard = (props: PlaceCardOptions) => {
       </Grid>
       <Typography>Humidity: {humidity}%</Typography>
       <Typography>Wind: {windSpeed} km/h</Typography>
-      <Box style={{ textAlign: "right" }}>
+      <Box className={classes.button}>
         <Button
-          variant="outlined"
+          variant="contained"
           color="primary"
           onClick={props.onBookmark}
-          startIcon={
-            <Icon color="primary">
-              {place.bookmark ? "favorite" : "favorite_border"}
-            </Icon>
-          }
+          startIcon={place.bookmark ? <FavoriteIcon /> : <FavoriteBorderIcon />}
         >
           Bookmark
         </Button>

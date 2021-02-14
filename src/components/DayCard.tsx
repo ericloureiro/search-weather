@@ -3,7 +3,10 @@ import {
   Card,
   CardContent,
   CardHeader,
+  createStyles,
   Grid,
+  makeStyles,
+  Theme,
   Typography,
 } from "@material-ui/core";
 import { useMemo } from "react";
@@ -23,7 +26,18 @@ interface DayCardOptions {
   day: Day;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      textAlign: "center",
+      backgroundColor: theme.palette.background.paper,
+      width: 130,
+    },
+  })
+);
+
 const DayCard = (props: DayCardOptions) => {
+  const classes = useStyles();
   const { icon, temp, unix } = props.day;
 
   const date = useMemo(() => {
@@ -33,7 +47,7 @@ const DayCard = (props: DayCardOptions) => {
   }, [unix]);
 
   return (
-    <Card style={{ width: 125 }}>
+    <Card className={classes.root} variant="outlined">
       <CardHeader
         title={
           <Typography variant="body2" color="textSecondary" component="p">

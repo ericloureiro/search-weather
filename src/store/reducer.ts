@@ -1,6 +1,25 @@
 import produce from "immer";
 import { ApplicationAction, ApplicationState, Place, PlaceList } from "./types";
 
+const getTheme = (): "dark" | "light" => {
+  if (!localStorage.hasOwnProperty("theme")) {
+    return "light";
+  }
+
+  const theme = localStorage.getItem("theme");
+
+  console.log(theme);
+  if (
+    theme === "" ||
+    theme === null ||
+    (theme !== "dark" && theme !== "light")
+  ) {
+    return "light";
+  }
+
+  return theme;
+};
+
 const getBookmarks = (): PlaceList => {
   if (!localStorage.hasOwnProperty("bookmarks")) {
     return [];
@@ -17,6 +36,7 @@ const getBookmarks = (): PlaceList => {
 
 export const initialState: ApplicationState = {
   loaded: false,
+  theme: "light",
   forecast: {},
   place: {
     place_id: "ChIJubLJNBVzIg0RbDzUOSeDr00",
@@ -58,6 +78,10 @@ const reducer = (state = initialState, action: ApplicationAction) => {
           ),
         };
       });
+    case "toggleTheme":
+      return produce(state, (draft) => {
+        draft.theme = state.theme === "dark" ? "light" : "dark";
+      });
     case "toggleBookmark":
       return produce(state, (draft) => {
         const { place } = draft;
@@ -87,6 +111,7 @@ const reducer = (state = initialState, action: ApplicationAction) => {
         );
       });
     default:
+      state.theme = getTheme();
       state.bookmarks = getBookmarks();
       state.place.bookmark = state.bookmarks.some(
         (place: Place) => place.place_id === state.place.place_id

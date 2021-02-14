@@ -21,6 +21,7 @@ export interface NumberCallback {
 export type ApplicationAction =
   | SetForecast
   | SetPlace
+  | ToggleTheme
   | ToggleBookmark
   | RemoveBookmark;
 
@@ -35,6 +36,10 @@ export interface SetPlace extends Action {
   place: Place;
 }
 
+export interface ToggleTheme extends Action {
+  type: "toggleTheme";
+}
+
 export interface ToggleBookmark extends Action {
   type: "toggleBookmark";
 }
@@ -46,6 +51,7 @@ export interface RemoveBookmark extends Action {
 
 /* Properties */
 export interface ApplicationState {
+  theme: "dark" | "light" | undefined;
   loaded: boolean;
   place: Place;
   forecast: Forecast;
