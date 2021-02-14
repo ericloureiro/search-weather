@@ -83,7 +83,7 @@ const reducer = (state = initialState, action: ApplicationAction) => {
         }
 
         draft.bookmarks = draft.bookmarks.filter(
-          (place: Place) => place.place_id !== draft.place.place_id
+          (place: Place) => place.place_id !== id
         );
       });
     default:
