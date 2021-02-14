@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { useMemo } from "react";
 import { Day } from "../store/types";
+import IconImage from "./IconImage";
 
 const SHORT_WEEKDAYS = [
   "SUNDAY",
@@ -30,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       textAlign: "center",
-      backgroundColor: theme.palette.background.paper,
       width: 130,
     },
   })
@@ -56,7 +56,7 @@ const DayCard = (props: DayCardOptions) => {
         }
       />
       <Box>
-        <img src={icon} alt="Weather Icon" />
+        <IconImage icon={icon} />
       </Box>
       <CardContent>
         <Grid container direction="row" justify="center" spacing={2}>

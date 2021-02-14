@@ -32,6 +32,15 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       padding: 20,
     },
+    loader: {
+      textAlign: "center",
+    },
+    progress: {
+      margin: 20,
+    },
+    week: {
+      paddingTop: 20,
+    },
   })
 );
 
@@ -126,9 +135,9 @@ const Weather = (props: ApplicationState) => {
       <Grid container direction="column" alignItems="center" justify="center">
         <Paper className={classes.paper}>
           {!loaded ? (
-            <Box>
+            <Box className={classes.loader}>
               <Typography>Waiting for Location...</Typography>
-              <CircularProgress style={{ margin: 20 }} />
+              <CircularProgress className={classes.progress} />
               <Typography>
                 If no permission is granted, Leiria's coordinates will be used
               </Typography>
@@ -163,7 +172,7 @@ const Weather = (props: ApplicationState) => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item style={{ margin: 10 }}>
+                  <Grid className={classes.week} item>
                     <WeekGrid week={week} />
                   </Grid>
                 </Grid>

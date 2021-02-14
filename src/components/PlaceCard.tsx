@@ -11,6 +11,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import { useMemo } from "react";
 import { Day, Place, VoidCallback } from "../store/types";
+import IconImage from "./IconImage";
 
 const FULL_WEEKDAYS = [
   "sunday",
@@ -34,6 +35,14 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: "85vw",
       overflow: "hidden",
       textAlign: "left",
+    },
+    temp: {
+      paddingLeft: 5,
+    },
+    text: {
+      [theme.breakpoints.up("md")]: {
+        maxWidth: "40vw",
+      },
     },
     button: {
       textAlign: "right",
@@ -59,27 +68,28 @@ const PlaceCard = (props: PlaceCardOptions) => {
   }, [today]);
 
   return (
-    <div className={classes.root}>
-      <Box>
-        <Typography noWrap variant="body1" color="textSecondary">
-          {place.structured_formatting.main_text}
-        </Typography>
-        <Typography noWrap variant="h5">
-          {place.structured_formatting.secondary_text}
-        </Typography>
-        <Typography variant="body1">{description}</Typography>
-        <Typography color="textSecondary">{date}</Typography>
-      </Box>
+    <Box className={classes.root}>
+      <Typography
+        className={classes.text}
+        noWrap
+        variant="body1"
+        color="textSecondary"
+      >
+        {place.structured_formatting.main_text}
+      </Typography>
+      <Typography className={classes.text} noWrap variant="h5">
+        {place.structured_formatting.secondary_text}
+      </Typography>
+      <Typography variant="body1">{description}</Typography>
+      <Typography color="textSecondary">{date}</Typography>
       <Grid
         container
         direction="row"
         justify="flex-start"
         alignItems="flex-start"
       >
-        <Box>
-          <img src={icon} alt="Weather Icon" />
-        </Box>
-        <Box>
+        <IconImage icon={icon} />
+        <Box className={classes.temp}>
           <Grid
             container
             direction="row"
@@ -103,7 +113,7 @@ const PlaceCard = (props: PlaceCardOptions) => {
           Bookmark
         </Button>
       </Box>
-    </div>
+    </Box>
   );
 };
 

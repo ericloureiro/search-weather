@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -9,15 +9,7 @@ interface TabPanelProps {
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index } = props;
 
-  return (
-    <div>
-      {value === index && (
-        <Grid container direction="column" alignItems="center" justify="center">
-          <Grid item>{children}</Grid>
-        </Grid>
-      )}
-    </div>
-  );
+  return <div>{value === index && <Box>{children}</Box>}</div>;
 };
 
 export default TabPanel;

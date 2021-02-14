@@ -20,8 +20,9 @@ interface SearchInputOptions {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: 20,
-      width: "30vw",
+      marginTop: 20,
+      paddingLeft: "20%",
+      width: "60%",
       minWidth: 250,
     },
     icon: {

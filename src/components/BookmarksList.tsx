@@ -22,7 +22,7 @@ interface BookmarksListOptions {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      maxHeight: 220,
+      maxHeight: "30vh",
       overflow: "auto",
     },
     title: {

@@ -54,9 +54,7 @@ const App = (props: ApplicationState) => {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <header style={{ textAlign: "center" }}>
-        <Weather className={classes.root} />
-      </header>
+      <Weather className={classes.root} />
       <Fab
         className={classes.fab}
         color="primary"

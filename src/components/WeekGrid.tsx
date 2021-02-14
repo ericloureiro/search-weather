@@ -15,7 +15,7 @@ const WeekGrid = (props: WeekGridOptions) => {
       direction="row"
       justify="center"
       alignItems="center"
-      spacing={2}
+      spacing={1}
     >
       {week.map((day, index) => (
         <Grid item key={index}>
