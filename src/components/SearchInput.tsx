@@ -22,8 +22,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       marginTop: 20,
       paddingLeft: "20%",
+      marginRight: "20%",
       width: "60%",
-      minWidth: 250,
+      minWidth: 200,
     },
     icon: {
       margin: 5,

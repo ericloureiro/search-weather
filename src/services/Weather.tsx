@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
       minHeight: "100vh",
     },
     paper: {
+      backgroundColor: theme.palette.background.paper,
       padding: 20,
     },
     loader: {
