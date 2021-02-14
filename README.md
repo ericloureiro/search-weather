@@ -11,14 +11,17 @@ export const GOOGLE_MAPS_KEY = "YOUR_GOOGLE_MAPS_API_KEY";
 ```
 
 # Features
-Find and favorite your places:
+## Find and favorite your places:
+
 ![](public/gifs/functionalities.gif)
 
-Supports to dark/light modes:
+## Supports to dark/light modes:
+
 ![](public/gifs/theme-switch.gif)
 
-Responsitivity to smaller screens:
-![](public/gifs/theme-switch.gif)
+## Responsitivity to smaller screens:
+
+![](public/gifs/mobile.gif)
 
 ## Bibliography:
 Locations API by [Google Maps](https://developers.google.com/maps/)
