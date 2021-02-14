@@ -21,7 +21,10 @@ export const GOOGLE_MAPS_KEY = "YOUR_GOOGLE_MAPS_API_KEY";
 
 ## Responsitivity to smaller screens:
 
-![](public/gifs/mobile.gif)
+| Light  | Dark |
+| ------------- | ------------- |
+| ![](public/gifs/mobile-light.gif)  | ![](public/gifs/mobile-dark.gif) |
+
 
 ## Bibliography:
 Locations API by [Google Maps](https://developers.google.com/maps/)
