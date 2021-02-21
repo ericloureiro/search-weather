@@ -5,6 +5,7 @@ import {
   makeStyles,
   Theme,
   ThemeProvider,
+  Typography,
 } from "@material-ui/core";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
@@ -12,6 +13,7 @@ import React, { useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import Weather from "./services/Weather";
 import { toggleTheme } from "./store/actions";
+import { GOOGLE_MAPS_KEY, OPEN_WEATHER_KEY } from "./store/keys";
 import { ApplicationState } from "./store/types";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -49,7 +51,12 @@ const App = (props: ApplicationState) => {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  return (
+  return OPEN_WEATHER_KEY === "YOUR_OPEN_WEATHER_API_KEY" ||
+    GOOGLE_MAPS_KEY === "YOUR_GOOGLE_MAPS_API_KEY" ? (
+    <div className={classes.root}>
+      <Typography>ERROR: Please, setup your API keys</Typography>
+    </div>
+  ) : (
     <ThemeProvider theme={darkTheme}>
       <Weather className={classes.root} />
       <Fab
