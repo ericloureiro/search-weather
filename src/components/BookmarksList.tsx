@@ -44,9 +44,9 @@ const BookmarksList = (props: BookmarksListOptions) => {
       ) : (
         <Box>
           <List>
-            {bookmarks.map((place, index) => (
+            {bookmarks.map((place) => (
               <ListItem
-                key={index}
+                key={place.place_id}
                 divider
                 button
                 onClick={() => props.onSelect(place)}
