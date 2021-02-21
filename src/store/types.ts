@@ -27,8 +27,7 @@ export type ApplicationAction =
 
 export interface SetForecast extends Action {
   type: "setForecast";
-  today: Day;
-  week: Week;
+  forecast: Forecast;
 }
 
 export interface SetPlace extends Action {

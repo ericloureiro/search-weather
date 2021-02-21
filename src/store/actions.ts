@@ -10,8 +10,10 @@ import {
 
 export const setForecast = (action: Map<string, any>): SetForecast => ({
   type: "setForecast",
-  today: DayModel(action["hourly"][0]),
-  week: action["daily"].map((data: any) => DayModel(data)),
+  forecast: {
+    today: DayModel(action["hourly"][0]),
+    week: action["daily"].map((data: any) => DayModel(data)),
+  },
 });
 
 export const setPlace = (place: Place): SetPlace => ({

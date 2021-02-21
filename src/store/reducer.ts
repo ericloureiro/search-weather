@@ -8,7 +8,6 @@ const getTheme = (): "dark" | "light" => {
 
   const theme = localStorage.getItem("theme");
 
-  console.log(theme);
   if (
     theme === "" ||
     theme === null ||
@@ -61,13 +60,16 @@ export const initialState: ApplicationState = {
 };
 
 const reducer = (state = initialState, action: ApplicationAction) => {
-  console.log(action.type);
   switch (action.type) {
     case "setForecast":
       return produce(state, (draft) => {
         draft.loaded = true;
-        draft.forecast.today = action.today;
-        draft.forecast.week = action.week;
+        draft.forecast = action.forecast;
+        // draft = {
+        //   ...state,
+        //   loaded: true,
+        //   forecast: action.forecast,
+        // };
       });
     case "setPlace":
       return produce(state, (draft) => {
@@ -111,14 +113,16 @@ const reducer = (state = initialState, action: ApplicationAction) => {
         );
       });
     default:
-      state.theme = getTheme();
-      state.bookmarks = getBookmarks();
-      state.place.bookmark = state.bookmarks.some(
-        (place: Place) => place.place_id === state.place.place_id
-      );
-
       return {
         ...state,
+        theme: getTheme(),
+        bookmarks: getBookmarks(),
+        place: {
+          ...state.place,
+          bookmark: state.bookmarks.some(
+            (place: Place) => place.place_id === state.place.place_id
+          ),
+        },
       };
   }
 };
