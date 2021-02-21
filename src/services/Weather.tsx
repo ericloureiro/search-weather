@@ -19,8 +19,8 @@ import {
   setPlace,
   toggleBookmark,
 } from "../store/actions";
-import { GOOGLE_MAPS_KEY, OPEN_WEATHER_KEY } from "../store/keys";
 import { ApplicationState, LatLngLiteral } from "../store/types";
+import { fetchWeather, loadGoogleMapsScript } from "../utils/functions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,18 +45,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const loadScript = (src: string, position: HTMLElement | null, id: string) => {
-  if (!position) {
-    return;
-  }
-
-  const script = document.createElement("script");
-  script.setAttribute("async", "");
-  script.setAttribute("id", id);
-  script.src = src;
-  position.appendChild(script);
-};
-
 const mapStateToProps = (state: ApplicationState) => ({
   loaded: state.loaded,
   forecast: state.forecast,
@@ -68,68 +56,39 @@ const Weather = (props: ApplicationState) => {
   const classes = useStyles();
   const { forecast, place, bookmarks } = props;
   const { today, week } = forecast;
+  const { location } = place;
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (typeof window !== "undefined" || !loaded) {
-      if (!document.querySelector("#google-maps")) {
-        loadScript(
-          "https://maps.googleapis.com/maps/api/js?key=" +
-            GOOGLE_MAPS_KEY +
-            "&libraries=places",
-          document.querySelector("head"),
-          "google-maps"
-        );
-      }
+    if (typeof window === "undefined" || loaded) return;
 
-      /** Timeout to make sure google api is attached to browser
-       *
-       * TODO: Find a better way to handle load instead of setTimeout */
-      setTimeout(() => {
-        setLoaded(true);
-      }, 500);
-    }
-  });
+    if (!document.querySelector("#google-maps")) loadGoogleMapsScript();
+
+    /** Timeout to make sure google api is attached to browser
+     * TODO: Find a better way to handle load instead of setTimeout */
+    setTimeout(() => {
+      setLoaded(true);
+    }, 500);
+  }, [loaded]);
 
   useEffect(() => {
-    if (!loaded) {
-      return;
-    }
+    if (!location) return;
 
-    const buildRequestUrl = (location: LatLngLiteral): string => {
-      return (
-        "https://api.openweathermap.org/data/2.5/onecall?" +
-        `&lat=${location.lat}` +
-        `&lon=${location.lng}` +
-        `&exclude=alerts` +
-        `&appid=${OPEN_WEATHER_KEY}` +
-        `&units=metric`
-      );
-    };
-
-    const fetchWeather = async (location: LatLngLiteral) => {
-      const url = buildRequestUrl(location);
-
-      const response = await fetch(url);
-
-      const data = await response.json();
+    const dispatchForecast = async (location: LatLngLiteral) => {
+      const data = await fetchWeather(location);
 
       dispatch(setForecast(data));
     };
 
-    if (!!place.location) {
-      fetchWeather(place.location);
-    }
-  }, [dispatch, loaded, place.location]);
+    dispatchForecast(location);
+  }, [dispatch, location]);
 
   useEffect(() => {
-    if (!loaded) {
-      return;
-    }
+    if (!loaded) return;
 
     localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-  }, [bookmarks, loaded]);
+  }, [loaded, bookmarks]);
 
   return (
     <div className={classes.root}>
