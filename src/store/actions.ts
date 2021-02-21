@@ -1,5 +1,5 @@
-import DayModel from "../utils/DayFactory";
 import {
+  Forecast,
   Place,
   RemoveBookmark,
   SetForecast,
@@ -8,12 +8,9 @@ import {
   ToggleTheme,
 } from "./types";
 
-export const setForecast = (action: Map<string, any>): SetForecast => ({
+export const setForecast = (forecast: Forecast): SetForecast => ({
   type: "setForecast",
-  forecast: {
-    today: DayModel(action["hourly"][0]),
-    week: action["daily"].map((data: any) => DayModel(data)),
-  },
+  forecast,
 });
 
 export const setPlace = (place: Place): SetPlace => ({

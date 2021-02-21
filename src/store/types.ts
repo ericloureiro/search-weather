@@ -1,5 +1,12 @@
 import { Action } from "redux";
 
+declare global {
+  interface Window {
+    autocompleteService: any;
+    geocoder: any;
+  }
+}
+
 /* Callbacks */
 export interface PlaceCallback {
   (place: Place): void;
@@ -51,34 +58,78 @@ export interface RemoveBookmark extends Action {
 /* Properties */
 export interface ApplicationState {
   theme: "dark" | "light" | undefined;
-  loaded: boolean;
   place: Place;
-  forecast: Forecast;
+  forecast?: Forecast;
   bookmarks: PlaceList;
 }
 
+/* OpenWeather API */
 export interface Forecast {
-  today?: Day;
-  week?: Week;
+  current: Day;
+  daily: Week;
+  lat: number;
+  lon: number;
+  timezone: string;
+  timezone_offset: number;
 }
 
 export interface Day {
+  dt: number;
+  sunrise: number;
+  sunset: number;
+  temp: number;
+  feels_like: number;
+  pressure: number;
+  humidity: number;
+  dew_point: number;
+  uvi: number;
+  clouds: number;
+  visibility: number;
+  wind_speed: number;
+  wind_deg: number;
+  weather: Array<Weather>;
+}
+
+export interface Week extends Array<ExtendedDay> {}
+
+export interface ExtendedDay {
+  clouds: number;
+  dew_point: number;
+  dt: number;
+  feels_like: FeelsLike;
+  humidity: number;
+  pop: number;
+  pressure: number;
+  rain: number;
+  sunrise: number;
+  sunset: number;
+  temp: Temp;
+  uvi: number;
+  weather: Array<Weather>;
+  wind_deg: number;
+  wind_speed: number;
+}
+
+export interface FeelsLike {
+  day: number;
+  eve: number;
+  morn: number;
+  night: number;
+}
+
+export interface Temp extends FeelsLike {
+  max: number;
+  min: number;
+}
+
+export interface Weather {
+  id: number;
+  main: string;
   description: string;
   icon: string;
-  humidity: number;
-  temp: Temperature;
-  unix: number;
-  windSpeed: number;
 }
 
-export interface Week extends Array<Day> {}
-
-export interface Temperature {
-  min?: number;
-  max?: number;
-  current?: number;
-}
-
+/* Google Maps API */
 export interface GeocoderRequest {
   location?: LatLngLiteral;
   placeId?: string;

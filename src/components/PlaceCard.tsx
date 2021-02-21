@@ -53,19 +53,20 @@ const useStyles = makeStyles((theme: Theme) =>
 const PlaceCard = (props: PlaceCardOptions) => {
   const classes = useStyles();
   const { place, today } = props;
-  const { humidity, icon, temp, unix, windSpeed } = today;
+  const { humidity, temp, dt, wind_speed } = today;
+  const weather = today.weather[0];
 
   const date = useMemo(() => {
-    const date = new Date(unix * 1000);
+    const date = new Date(dt * 1000);
 
     return `${FULL_WEEKDAYS[date.getDay()]}, ${date.getHours()}:00`;
-  }, [unix]);
+  }, [dt]);
 
   const description = useMemo(() => {
     return (
-      today.description?.charAt(0).toUpperCase() + today.description?.slice(1)
+      weather.description.charAt(0).toUpperCase() + weather.description.slice(1)
     );
-  }, [today]);
+  }, [weather]);
 
   return (
     <Box className={classes.root}>
@@ -88,7 +89,7 @@ const PlaceCard = (props: PlaceCardOptions) => {
         justify="flex-start"
         alignItems="flex-start"
       >
-        <IconImage icon={icon} />
+        <IconImage icon={weather.icon} />
         <Box className={classes.temp}>
           <Grid
             container
@@ -96,13 +97,13 @@ const PlaceCard = (props: PlaceCardOptions) => {
             justify="flex-start"
             alignItems="flex-start"
           >
-            <Typography variant="h3">{temp.current}</Typography>
+            <Typography variant="h3">{Math.round(temp)}</Typography>
             <Typography variant="h5"> ºC</Typography>
           </Grid>
         </Box>
       </Grid>
       <Typography>Humidity: {humidity}%</Typography>
-      <Typography>Wind: {windSpeed} km/h</Typography>
+      <Typography>Wind: {wind_speed} km/h</Typography>
       <Box className={classes.button}>
         <Button
           variant="contained"

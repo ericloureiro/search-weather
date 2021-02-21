@@ -19,8 +19,12 @@ import {
   setPlace,
   toggleBookmark,
 } from "../store/actions";
-import { ApplicationState, LatLngLiteral } from "../store/types";
-import { fetchWeather, loadGoogleMapsScript } from "../utils/functions";
+import { ApplicationState } from "../store/types";
+import {
+  fetchGeocode,
+  fetchOpenWeather,
+  loadGoogleMapsScript,
+} from "../utils/functions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,7 +50,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const mapStateToProps = (state: ApplicationState) => ({
-  loaded: state.loaded,
   forecast: state.forecast,
   place: state.place,
   bookmarks: state.bookmarks,
@@ -55,7 +58,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 const Weather = (props: ApplicationState) => {
   const classes = useStyles();
   const { forecast, place, bookmarks } = props;
-  const { today, week } = forecast;
   const { location } = place;
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
@@ -65,23 +67,36 @@ const Weather = (props: ApplicationState) => {
 
     if (!document.querySelector("#google-maps")) loadGoogleMapsScript();
 
-    /** Timeout to make sure google api is attached to browser
-     * TODO: Find a better way to handle load instead of setTimeout */
-    setTimeout(() => {
+    window.onload = () => {
+      window.autocompleteService = new window.google.maps.places.AutocompleteService();
+      window.geocoder = new window.google.maps.Geocoder();
+
       setLoaded(true);
-    }, 500);
+    };
   }, [loaded]);
+
+  useEffect(() => {
+    if (!loaded) return;
+
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }: { coords: GeolocationCoordinates }) =>
+        fetchGeocode(
+          {
+            location: {
+              lat: coords.latitude,
+              lng: coords.longitude,
+            },
+          },
+          (place) => dispatch(setPlace(place))
+        ),
+      (err) => console.warn(err)
+    );
+  }, [dispatch, loaded]);
 
   useEffect(() => {
     if (!location) return;
 
-    const dispatchForecast = async (location: LatLngLiteral) => {
-      const data = await fetchWeather(location);
-
-      dispatch(setForecast(data));
-    };
-
-    dispatchForecast(location);
+    fetchOpenWeather(location).then((data) => dispatch(setForecast(data)));
   }, [dispatch, location]);
 
   useEffect(() => {
@@ -104,7 +119,7 @@ const Weather = (props: ApplicationState) => {
             </Box>
           ) : (
             <div>
-              {today === undefined || week === undefined ? (
+              {forecast === undefined ? (
                 <CircularProgress />
               ) : (
                 <Grid container direction="column">
@@ -113,7 +128,7 @@ const Weather = (props: ApplicationState) => {
                       <Grid item xs={12} sm={6}>
                         <PlaceCard
                           place={place}
-                          today={today}
+                          today={forecast.current}
                           onBookmark={() => {
                             dispatch(toggleBookmark());
                           }}
@@ -133,7 +148,7 @@ const Weather = (props: ApplicationState) => {
                     </Grid>
                   </Grid>
                   <Grid className={classes.week} item>
-                    <WeekGrid week={week} />
+                    <WeekGrid week={forecast.daily} />
                   </Grid>
                 </Grid>
               )}

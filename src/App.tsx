@@ -30,11 +30,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const mapStateToProps = (state: ApplicationState) => ({
   theme: state.theme,
-  loaded: state.loaded,
 });
 
 const App = (props: ApplicationState) => {
-  const { theme, loaded } = props;
+  const { theme } = props;
   const dispatch = useDispatch();
   const classes = useStyles();
   const darkState = theme === "dark";
@@ -45,12 +44,10 @@ const App = (props: ApplicationState) => {
   });
 
   useEffect(() => {
-    if (!loaded || !theme) {
-      return;
-    }
+    if (!theme) return;
 
     localStorage.setItem("theme", theme);
-  }, [theme, loaded]);
+  }, [theme]);
 
   return (
     <ThemeProvider theme={darkTheme}>

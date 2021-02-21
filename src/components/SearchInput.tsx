@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const SearchInput = (props: SearchInputOptions) => {
   const classes = useStyles();
-  const autocomplete = { current: null };
   const [value, setValue] = useState<Place | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState<Place[]>([]);
@@ -44,21 +43,13 @@ const SearchInput = (props: SearchInputOptions) => {
     () =>
       throttle(
         (request: { input: string }, callback: (results?: Place[]) => void) =>
-          (autocomplete.current as any).getPlacePredictions(request, callback),
+          window.autocompleteService.getPlacePredictions(request, callback),
         200
       ),
     []
   );
 
   useEffect(() => {
-    if (!autocomplete.current && (window as any).google) {
-      autocomplete.current = new (window as any).google.maps.places.AutocompleteService();
-    }
-
-    if (!autocomplete.current) {
-      return undefined;
-    }
-
     if (inputValue === "") {
       setOptions(value !== null ? [value] : []);
 

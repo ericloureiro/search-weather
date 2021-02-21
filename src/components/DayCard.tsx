@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { useMemo } from "react";
-import { Day } from "../store/types";
+import { ExtendedDay } from "../store/types";
 import IconImage from "./IconImage";
 
 const SHORT_WEEKDAYS = [
@@ -24,7 +24,7 @@ const SHORT_WEEKDAYS = [
 ];
 
 interface DayCardOptions {
-  day: Day;
+  day: ExtendedDay;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,13 +38,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const DayCard = (props: DayCardOptions) => {
   const classes = useStyles();
-  const { icon, temp, unix } = props.day;
+  const { weather, temp, dt } = props.day;
 
   const date = useMemo(() => {
-    const date = new Date(unix * 1000);
+    const date = new Date(dt * 1000);
 
     return SHORT_WEEKDAYS[date.getDay()];
-  }, [unix]);
+  }, [dt]);
 
   return (
     <Card className={classes.root} variant="outlined">
@@ -56,18 +56,17 @@ const DayCard = (props: DayCardOptions) => {
         }
       />
       <Box>
-        <IconImage icon={icon} />
+        <IconImage icon={weather[0].icon} />
       </Box>
       <CardContent>
         <Grid container direction="row" justify="center" spacing={2}>
           <Grid item>
-            <Typography variant="h6">{`${temp.max}º`}</Typography>
+            <Typography variant="h6">{`${Math.round(temp.max)}º`}</Typography>
           </Grid>
           <Grid item>
-            <Typography
-              variant="h6"
-              color="textSecondary"
-            >{`${temp.min}º`}</Typography>
+            <Typography variant="h6" color="textSecondary">{`${Math.round(
+              temp.min
+            )}º`}</Typography>
           </Grid>
         </Grid>
       </CardContent>

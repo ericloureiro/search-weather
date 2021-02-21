@@ -34,9 +34,7 @@ const getBookmarks = (): PlaceList => {
 };
 
 export const initialState: ApplicationState = {
-  loaded: false,
   theme: "light",
-  forecast: {},
   place: {
     place_id: "ChIJubLJNBVzIg0RbDzUOSeDr00",
     description: "Leiria, Portugal",
@@ -63,13 +61,7 @@ const reducer = (state = initialState, action: ApplicationAction) => {
   switch (action.type) {
     case "setForecast":
       return produce(state, (draft) => {
-        draft.loaded = true;
         draft.forecast = action.forecast;
-        // draft = {
-        //   ...state,
-        //   loaded: true,
-        //   forecast: action.forecast,
-        // };
       });
     case "setPlace":
       return produce(state, (draft) => {
